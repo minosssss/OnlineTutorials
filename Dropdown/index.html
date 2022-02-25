@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="dropdown">
+        <input type="text" class="textBox" placeholder="Dropdown Menu" readonly>
+        <div class="option">
+            <div onclick="inputName('Html')"><ion-icon name="logo-html5"></ion-icon>Html</div>
+            <div onclick="inputName('CSS')"><ion-icon name="logo-css3"></ion-icon>CSS</div>
+            <div onclick="inputName('JavaScript')"><ion-icon name="logo-javascript"></ion-icon>JavaScript</div>
+            <div onclick="inputName('ReactJS')"><ion-icon name="logo-react"></ion-icon>ReactJS</div>
+            <div onclick="inputName('Python')"><ion-icon name="logo-python"></ion-icon>Python</div>
+        </div>
+    </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        function inputName(name){
+            document.querySelector('.textBox').value = name;
+        }
+
+        let dropdown = document.querySelector('.dropdown');
+
+        dropdown.onclick = function(){
+            dropdown.classList.toggle('active');
+        }
+
+    </script>
+</body>
+</html>
