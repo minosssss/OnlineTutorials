@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucky Spin</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 </head>
 
 <body>
@@ -24,7 +25,7 @@
         <div class="nine" >9</div>
         <div class="ten"  >10</div>
     </div> -->
-    <div>
+    <div class="box">
         <ul class="circle">
             <li class="one">
                 <div class="text">1</div>
@@ -56,12 +57,74 @@
             <li class="ten">
                 <div class="text">10</div>
             </li>
+            <li class="eleven">
+                <div class="text">11</div>
+            </li>
+            <li class="tweleve">
+                <div class="text">12</div>
+            </li>
+            <li class="thirtheen">
+                <div class="text">13</div>
+            </li>
         </ul>
+        <button class="btnSpin" onclick="startSpin()">SPIN</button>
     </div>
+
     <audio controls="controls" id="applause" src="audio/applause.mp3" type="audion/mp3"></audio>
     <audio controls="controls" id="wheel" src="audio/wheel.mp3" type="audion/mp3"></audio>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+    <script>
 
+
+        function shuffle(arr) {
+            let currentIdx = arr.length;
+            let randomIdx;
+            while (0 !== currentIdx) {
+                randomIdx = Math.floor(Math.random() * currentIdx);
+                currentIdx--;
+                [arr[currentIdx], arr[randomIdx]] = [
+                    arr[currentIdx],
+                    arr[currentIdx]
+                ]
+            };
+            return arr;
+        };
+
+
+        function startSpin() {
+            wheel.play();
+            let circle = document.querySelector(".circle");
+            //클릭한 시간으로 숫자 넣기
+            let randomNumber = Math.ceil(Math.random() * 3000);
+            circle.style.setProperty('transition', 'all ease 5s');
+            circle.style.transform = "rotate(" + randomNumber + "deg)";
+            randomNumber += Math.ceil(Math.random() * 3000);
+
+            setTimeout(() => {
+                applause.play();
+                Swal.fire({
+                    title: 'Sweet!',
+                    text: "Number",
+                    icon: 'success',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                    }
+                })
+            },5500).then(()=>applause.stop());
+        }
+
+
+    </script>
 </body>
 
 </html>
