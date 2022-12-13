@@ -6,7 +6,7 @@
   box-sizing: border-box;
   font-family: 'Poppins',sans-serif;
 }
-.btn {
+.side-btn {
   position: absolute;
   top: 15px;
   left: 45px;
@@ -18,35 +18,35 @@
   cursor: pointer;
   transition: left 0.4s ease;
 }
-.btn.click{
+.side-btn.click{
   left: 260px;
 }
 
-.btn span {
+.side-btn span {
   color: white;
   font-size: 28px;
   line-height: 45px;
 }
 
-.btn.click span:before{
+.side-btn.click span:before{
   content: '\f00d';
 }
 
-.sidebar.show{
+.side-bar.show{
   left:0px;
 }
 
-.sidebar {
+.side-bar {
   position: fixed;
   width: 250px;
   left:0;
   height: 100%;
   background: #1b1b1b;
-  /* left: -250px; */
+  left: -250px;
   transition: left 0.4s ease;
 }
 
-.sidebar .text {
+.side-bar .text {
   color: white;
   font-size: 25px;
   font-weight: 600;

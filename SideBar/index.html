@@ -12,10 +12,10 @@
 </head>
 
 <body>
-  <div class="btn">
+  <div class="side-btn">
     <span class="fas fa-bars"></span>
   </div>
-  <nav class="sidebar">
+  <nav class="side-bar">
     <div class="text">Side Menu</div>
     <ul>
       <li>
@@ -56,9 +56,9 @@
 
 </body>
 <script>
-  $('.btn').click(function (e) {
+  $('.side-btn').click(function (e) {
     $(this).toggleClass('click');
-    $('.sidebar').toggleClass('show');
+    $('.side-bar').toggleClass('show');
   })
   $('.serv-btn').click(function (e) {
     $(e.target.nextElementSibling).toggleClass('show');
