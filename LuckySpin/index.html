@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucky Spin</title>
     <link rel="stylesheet" href="styles.css">
@@ -26,8 +25,8 @@
         <div class="ten"  >10</div>
     </div> -->
     <div class="box">
-        <ul class="circle">
-            <li class="one">
+        <ul id="circle" class="circle">
+            <!-- <li class="one">
                 <div class="text">1</div>
             </li>
             <li class="two">
@@ -65,7 +64,7 @@
             </li>
             <li class="thirtheen">
                 <div class="text">13</div>
-            </li>
+            </li> -->
         </ul>
         <button class="btnSpin" onclick="startSpin()">SPIN</button>
     </div>
@@ -75,8 +74,27 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
     <script>
+        let $circle = document.getElementById('circle');
+        const parser = new DOMParser();
 
+        function makeSpinItem(count) {
+            let tempHtml = "";
+            let itemArr = Array(count).fill().map((_, idx) => idx + 1);
+            let degArr = [];
+            itemArr.map((item, idx) => {
+                const shareDeg = idx === 0 ? 0 : 360 / Number(count) * idx;
+                let itemDeg = Math.round((shareDeg + Number.EPSILON) * 10) / 10;
+                degArr.push(itemDeg);
+                let skewY = (-90 + shareDeg).toFixed(2);
+                tempHtml += `<li class="${item}" data-deg=${itemDeg * idx}>
+                            <div class="text">${item}</div>
+                            </li>`
+            })
+            $circle.insertAdjacentHTML("beforeend", tempHtml);
 
+            return degArr;
+        }
+        let degArr = makeSpinItem(13);
         function shuffle(arr) {
             let currentIdx = arr.length;
             let randomIdx;
@@ -91,16 +109,28 @@
             return arr;
         };
 
+        let closestNumber = counts.reduce(function (prev, curr) {
+            return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
+        });
 
         function startSpin() {
             wheel.play();
             let circle = document.querySelector(".circle");
             //클릭한 시간으로 숫자 넣기
-            let randomNumber = Math.ceil(Math.random() * 3000);
+            let randomNumber = Math.ceil(Math.random() * 360)
+            let degNumber = randomNumber + 1800;
             circle.style.setProperty('transition', 'all ease 5s');
-            circle.style.transform = "rotate(" + randomNumber + "deg)";
-            randomNumber += Math.ceil(Math.random() * 3000);
+            circle.style.transform = "rotate(" + degNumber + "deg)";
 
+            let goalNumber = Math.abs(randomNumber - 360);
+
+            let closestNumber = degArr.reduce(function (prev, curr) {
+                return (Math.abs(curr - goalNumber) < Math.abs(prev - goalNumber) ? curr : prev);
+            });
+            console.log(degArr);
+            console.log(goalNumber)
+            console.log(closestNumber); 
+            console.log('goalItem=' + degArr.findIndex(e=>e===closestNumber))
             setTimeout(() => {
                 applause.play();
                 Swal.fire({
@@ -120,7 +150,7 @@
                         )
                     }
                 })
-            },5500).then(()=>applause.stop());
+            }, 5500);
         }
 
 
