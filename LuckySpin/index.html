@@ -10,12 +10,14 @@
 </head>
 
 <body>
-
+    <div class="arrow"></div>
     <div class="box">
+        
         <ul id="circle" class="circle">
 
         </ul>
         <button class="btnSpin" onclick="startSpin()">SPIN</button>
+
     </div>
 
     <audio controls="controls" id="applause" src="audio/applause.mp3" type="audion/mp3"></audio>
@@ -38,9 +40,9 @@
                 data-deg=${(itemDeg * idx).toFixed(2)} 
                 style="transform:rotate(${(itemDeg * idx).toFixed(2)}deg) skewY(${skewY}deg);">
                 <div class="text"
-                style="transform:skewY(${Math.abs(skewY)}deg) rotate(${(itemDeg/2).toFixed(2)}deg);">${item}</div>
+                style="transform:skewY(${Math.abs(skewY)}deg) rotate(${(itemDeg / 2).toFixed(2)}deg);">${item}</div>
                 </li>`
-                degArr.push(itemDeg);
+                degArr.push(itemDeg * idx);
             })
             $circle.insertAdjacentHTML("beforeend", tempHtml);
 
