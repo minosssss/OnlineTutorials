@@ -51,22 +51,32 @@
       return degArr;
     }
     let degArr = makeSpinItem(7);
-
+    // prompt 인원수, 아이템수...
+    let degNumber = 0;
     function startSpin() {
       wheel.play();
+      
       //클릭한 시간으로 숫자 넣기
-      let randomNumber = Math.ceil(Math.random() * 360)
-      let degNumber = randomNumber - 1800;
-      $container.style.transform = "rotate(" + degNumber + "deg)";
+      let randomNumber = Math.ceil(Math.random() * 360);
+      // 무작위를 뽑고
+
+      degNumber += (randomNumber - 1800);
+      console.log(degNumber);
+      $container.style.transform = `rotate(${degNumber}deg)`;
+
+
       let goalNumber = Math.abs(randomNumber - 360);
+      console.log(goalNumber);
       let closestNumber = degArr.reduce(function (prev, curr) {
         return (Math.abs(curr - goalNumber) <= Math.abs(prev - goalNumber) ? curr : prev);
       });
-      let number = Number(degArr.findIndex(e => e === closestNumber) + 1)
+      let resultNumber = parseInt(degArr.findIndex(e => e === closestNumber) + 1);
+      console.log(resultNumber);
+      degArr = degArr.map(x=>(x-goalNumber)).map(x=> x > 0 ? x : 360+x);
       setTimeout(() => {
         Swal.fire({
           title: 'Win Number',
-          text: number,
+          text: resultNumber,
           icon: 'success',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -85,6 +95,7 @@
           }
         })
       }, 5500)
+      
     }
 
 
