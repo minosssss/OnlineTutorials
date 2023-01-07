@@ -13,95 +13,94 @@
         , '#c9a601', '#d6006d', '#01b6de', '#80adaf', '#a44201'
         , '#e0b800', '#ec0078', '#0021b0', '#92b7d7', '#013add'
       ],
-      arrVerDiv: [], //수직 선 div
-      arrHorDiv: [], //수평 선 div
-      arrMovDiv: [], //이동 선 div
+      verticalLines: [], //수직 선 div
+      horizontalLines: [], //수평 선 div
+      moveLines: [], //이동 선 div
       arrIng: [], //진행여부 체크용
       arrMDiv: [], //이동선 배열 번호값 저장, 이동후 확인용
+
       nMaxWidth: 1000, //최고 넓이
       nWidth: 0, //사다리 넓이
       nHeight: 300, //사다리 높이
       nNum: 0,
 
-      arrTopDiv: [], //탑 div
-      arrBotDiv: [], //아래 div
-      arrGoDiv: [], //go 버튼 div
+      topDivs: [], //탑 div
+      bottomDivs: [], //아래 div
+      goBtns: [], //go 버튼 div
       getTarget: function (strId) {
         if (document.getElementById) 
         return document.getElementById(strId);
       },
       //div 리턴
       getDiv: function (sWidth, sHeight, sBgColor) {
-        var d = document.createElement("div");
-        if (sWidth) d.style.width = sWidth;
-        if (sHeight) d.style.height = sHeight;
-        if (sBgColor) d.style.backgroundColor = sBgColor;
-        d.style.position = "absolute";
-        d.style.overflow = "hidden";
-        return d;
+        let div = document.createElement("div");
+        if (sWidth) div.style.width = sWidth;
+        if (sHeight) div.style.height = sHeight;
+        if (sBgColor) div.style.backgroundColor = sBgColor;
+        div.style.position = "absolute";
+        div.style.overflow = "hidden";
+        return div;
       },
       init: function () {
         //갯수
-        this.nNum = parseInt(this.getTarget("sel_num").value);
+        this.nNum = parseInt(this.getTarget("selectNumber").value);
 
         //넓이
         this.nWidth = parseInt(this.nMaxWidth / this.nNum);
 
         for (var i = 0; i < this.nNum; i++) {
+          // top, bottom, button div 생성
+          this.topDivs[i] = this.getDiv(`${this.nWidth}px`, "50px", "");
+          this.bottomDivs[i] = this.getDiv(`${this.nWidth}px`, "50px", "");
+          this.goBtns[i] = this.getDiv(`${this.nWidth}px`, "30px", "");
 
-          this.arrTopDiv[i] = this.getDiv(this.nWidth + "px", "50px", "");
-          this.arrBotDiv[i] = this.getDiv(this.nWidth + "px", "50px", "");
-          this.arrGoDiv[i] = this.getDiv(this.nWidth + "px", "30px", "");
+          // top div 스타일 적용 
+          this.topDivs[i].style.left = (i * this.nWidth) + "px";
+          this.topDivs[i].style.top = "20px";
+          this.topDivs[i].style.fontSize = "12px";
+          this.topDivs[i].align = "center";
+          
+          // bottom div 스타일 적용 
+          this.bottomDivs[i].style.left = (i * this.nWidth) + "px";
+          this.bottomDivs[i].style.top = "410px";
+          this.bottomDivs[i].style.fontSize = "12px";
+          this.bottomDivs[i].align = "center";
+          
+          // button div 스타일 적용 
+          this.goBtns[i].style.left = (i * this.nWidth) + "px";
+          this.goBtns[i].style.top = "70px";
+          this.goBtns[i].align = "center";
 
-          this.arrTopDiv[i].style.left = (i * this.nWidth) + "px";
-          this.arrTopDiv[i].style.top = "20px";
+          this.topDivs[i].innerHTML = (i + 1) + '<br><input type="text" id="top_Input_' + i + '" value="" style="width:90%" tabindex="' + (i + 1) + '" />';
+          this.bottomDivs[i].innerHTML = '<input type="text" id="bottom_Input_' + i + '" value="" style="width:90%" tabindex="' + ((i + 1) + 50) + '" />';
 
-          this.arrBotDiv[i].style.left = (i * this.nWidth) + "px";
-          this.arrBotDiv[i].style.top = "410px";
-
-          this.arrGoDiv[i].style.left = (i * this.nWidth) + "px";
-          this.arrGoDiv[i].style.top = "70px";
-
-          this.arrTopDiv[i].style.fontSize = "12px";
-          this.arrBotDiv[i].style.fontSize = "12px";
-
-          //this.arrTopDiv[i].style.border = "1px solid #CCCCCC";
-          //this.arrBotDiv[i].style.border = "1px solid #CCCCCC";
-
-          this.arrTopDiv[i].align = "center";
-          this.arrBotDiv[i].align = "center";
-          this.arrGoDiv[i].align = "center";
-
-          this.arrTopDiv[i].innerHTML = (i + 1) + '<br><input type="text" id="inp_top_' + i + '" value="" style="width:90%" tabindex="' + (i + 1) + '" />';
-          this.arrBotDiv[i].innerHTML = '<input type="text" id="inp_bot_' + i + '" value="" style="width:90%" tabindex="' + ((i + 1) + 50) + '" />';
-
-          this.getTarget("div_body").appendChild(this.arrTopDiv[i]);
-          this.getTarget("div_body").appendChild(this.arrBotDiv[i]);
-          this.getTarget("div_body").appendChild(this.arrGoDiv[i]);
+          this.getTarget("ladderMain").appendChild(this.topDivs[i]);
+          this.getTarget("ladderMain").appendChild(this.bottomDivs[i]);
+          this.getTarget("ladderMain").appendChild(this.goBtns[i]);
 
 
-          this.arrVerDiv[i] = this.getDiv("1px", this.nHeight + "px", "#bbbbbb");
+          this.verticalLines[i] = this.getDiv("1px", this.nHeight + "px", "#bbbbbb");
 
-          this.arrVerDiv[i].style.left = ((i * this.nWidth) + parseInt(this.nWidth / 2)) + "px";
-          this.arrVerDiv[i].style.top = "100px";
+          this.verticalLines[i].style.left = ((i * this.nWidth) + parseInt(this.nWidth / 2)) + "px";
+          this.verticalLines[i].style.top = "100px";
 
-          this.getTarget("div_body").appendChild(this.arrVerDiv[i]);
+          this.getTarget("ladderMain").appendChild(this.verticalLines[i]);
 
         }
 
-        this.getTarget("div_step1").style.display = "none";
-        this.getTarget("div_step2").style.display = "";
+        this.getTarget("readyGame").style.display = "none";
+        this.getTarget("playGame").style.display = "";
 
       },
-      create: function () { //사다리 생성
-       
+      //사다리 생성
+      create: function () { 
         for (var i = 0; i < this.nNum; i++) {
-          this.arrTopDiv[i].innerHTML = (i + 1) + "<br>" + this.getTarget("inp_top_" + i).value;
-          this.arrBotDiv[i].innerHTML = this.getTarget("inp_bot_" + i).value;
-          this.arrGoDiv[i].innerHTML = '<input type="button" value="GO" onClick="Ladder.start(' + i + ')">';
+          this.topDivs[i].innerHTML = (i + 1) + "<br>" + this.getTarget("top_Input_" + i).value;
+          this.bottomDivs[i].innerHTML = this.getTarget("bottom_Input_" + i).value;
+          this.goBtns[i].innerHTML = '<input type="button" value="GO" onClick="Ladder.start(' + i + ')">';
 
-          this.arrTopDiv[i].style.overflow = "auto";
-          this.arrBotDiv[i].style.overflow = "auto";
+          this.topDivs[i].style.overflow = "auto";
+          this.bottomDivs[i].style.overflow = "auto";
 
           this.arrIng[i] = false;
 
@@ -109,18 +108,17 @@
         }
 
         for (var i = 0; i < (this.nNum * 7); i++) {
-          debugger;
-          var nLen = this.arrHorDiv.length;
+          var nLen = this.horizontalLines.length;
 
-          this.arrHorDiv[nLen] = this.getDiv(this.nWidth + "px", "1px", "#aaaaaa");
+          this.horizontalLines[nLen] = this.getDiv(this.nWidth + "px", "1px", "#aaaaaa");
 
           var nRndLeft = (parseInt(Math.random() * (this.nNum - 1)) * this.nWidth) + parseInt(this.nWidth / 2);
           var nRndTop = this.getRndTop();
 
-          this.arrHorDiv[nLen].style.left = nRndLeft + "px";
-          this.arrHorDiv[nLen].style.top = nRndTop + "px";
+          this.horizontalLines[nLen].style.left = nRndLeft + "px";
+          this.horizontalLines[nLen].style.top = nRndTop + "px";
 
-          this.getTarget("div_body").appendChild(this.arrHorDiv[nLen]);
+          this.getTarget("ladderMain").appendChild(this.horizontalLines[nLen]);
         }
       },
       sRndTop: "",
@@ -135,23 +133,22 @@
         }
       },
       start: function (no) {
-
         if (this.arrIng[no]) {
           for (var i = 0; i < this.arrMDiv.length; i++) {
             for (var j = 0; j < this.arrMDiv[i].length; j++) {
-              this.arrMovDiv[this.arrMDiv[i][j]].style.backgroundColor = "#CCCCCC";
-              this.arrMovDiv[this.arrMDiv[i][j]].style.zIndex = 1;
+              this.moveLines[this.arrMDiv[i][j]].style.backgroundColor = "#CCCCCC";
+              this.moveLines[this.arrMDiv[i][j]].style.zIndex = 1;
             }
 
           }
           for (var i = 0; i < this.arrMDiv[no].length; i++) {
-            this.arrMovDiv[this.arrMDiv[no][i]].style.backgroundColor = "#0000ff";
-            this.arrMovDiv[this.arrMDiv[no][i]].style.zIndex = 2;
+            this.moveLines[this.arrMDiv[no][i]].style.backgroundColor = "#0000ff";
+            this.moveLines[this.arrMDiv[no][i]].style.zIndex = 2;
           }
         } else {
 
-          var nSx = parseInt(this.arrVerDiv[no].style.left);
-          var nSy = parseInt(this.arrVerDiv[no].style.top);
+          var nSx = parseInt(this.verticalLines[no].style.left);
+          var nSy = parseInt(this.verticalLines[no].style.top);
 
           this.moveStart("y", no, nSx, nSy);
 
@@ -161,18 +158,18 @@
       },
       moveStart: function (sXy, pno, nSx, nSy) {
 
-        var nLen = this.arrMovDiv.length;
+        var nLen = this.moveLines.length;
 
-        this.arrMovDiv[nLen] = this.getDiv("2px", "2px", this.arrColor[pno]);
+        this.moveLines[nLen] = this.getDiv("2px", "2px", this.arrColor[pno]);
 
         this.arrMDiv[pno].push(nLen);
 
-        this.getTarget("div_body").appendChild(this.arrMovDiv[nLen]);
+        this.getTarget("ladderMain").appendChild(this.moveLines[nLen]);
 
-        this.arrMovDiv[nLen].style.left = nSx + "px";
-        this.arrMovDiv[nLen].style.top = nSy + "px";
+        this.moveLines[nLen].style.left = nSx + "px";
+        this.moveLines[nLen].style.top = nSy + "px";
 
-        this.arrMovDiv[nLen].style.zIndex = 3;
+        this.moveLines[nLen].style.zIndex = 3;
 
 
         var nEx = nSx;
@@ -181,12 +178,12 @@
 
         var bCk = false;
 
-        for (var i = 0; i < this.arrHorDiv.length; i++) {
+        for (var i = 0; i < this.horizontalLines.length; i++) {
 
-          var nx = parseInt(this.arrHorDiv[i].style.left);
-          var ny = parseInt(this.arrHorDiv[i].style.top);
-          var nw = parseInt(this.arrHorDiv[i].style.width);
-          var nh = parseInt(this.arrHorDiv[i].style.height);
+          var nx = parseInt(this.horizontalLines[i].style.left);
+          var ny = parseInt(this.horizontalLines[i].style.top);
+          var nw = parseInt(this.horizontalLines[i].style.width);
+          var nh = parseInt(this.horizontalLines[i].style.height);
 
           if (sXy == "x") {
             if (ny == nSy) {
@@ -221,10 +218,10 @@
       nSpeed: 10, 
       move: function (no, pno, nSx, nSy, nEx, nEy) {
 
-        var nx = parseInt(this.arrMovDiv[no].style.left);
-        var ny = parseInt(this.arrMovDiv[no].style.top);
-        var nw = parseInt(this.arrMovDiv[no].style.width);
-        var nh = parseInt(this.arrMovDiv[no].style.height);
+        var nx = parseInt(this.moveLines[no].style.left);
+        var ny = parseInt(this.moveLines[no].style.top);
+        var nw = parseInt(this.moveLines[no].style.width);
+        var nh = parseInt(this.moveLines[no].style.height);
 
         var np;
         var bIng = true;
@@ -238,7 +235,7 @@
               bIng = false;
               np = nSx - nEx;
             }
-            this.arrMovDiv[no].style.left = (nSx - np) + "px";
+            this.moveLines[no].style.left = (nSx - np) + "px";
           } else {
             if ((nSx + np) >= nEx) {
               bIng = false;
@@ -246,8 +243,8 @@
             }
           }
 
-          this.arrMovDiv[no].style.height = "4px";
-          this.arrMovDiv[no].style.width = np + "px";
+          this.moveLines[no].style.height = "4px";
+          this.moveLines[no].style.width = np + "px";
 
           sXy = "x";
         } else {
@@ -258,8 +255,8 @@
             np = nEy - nSy;
           }
 
-          this.arrMovDiv[no].style.width = "4px";
-          this.arrMovDiv[no].style.height = np + "px";
+          this.moveLines[no].style.width = "4px";
+          this.moveLines[no].style.height = np + "px";
 
           sXy = "y";
         }
@@ -271,19 +268,19 @@
 
         } else {
 
-          if ((sXy == "x")) this.arrMovDiv[no].style.height = "2px";
-          else this.arrMovDiv[no].style.width = "2px";
+          if ((sXy == "x")) this.moveLines[no].style.height = "2px";
+          else this.moveLines[no].style.width = "2px";
 
           if (nEy < this.nHeight + 100) {
             this.moveStart((sXy == "x") ? "y" : "x", pno, nEx, nEy);
           } else {
 
-            for (var i = 0; i < this.arrVerDiv.length; i++) {
-              if (nEx == parseInt(this.arrVerDiv[i].style.left)) {
+            for (var i = 0; i < this.verticalLines.length; i++) {
+              if (nEx == parseInt(this.verticalLines[i].style.left)) {
 
-                this.arrBotDiv[i].innerHTML = "<b>" + (pno + 1) + "</b><br>" + this.arrBotDiv[i].innerHTML;
+                this.bottomDivs[i].innerHTML = "<b>" + (pno + 1) + "</b><br>" + this.bottomDivs[i].innerHTML;
 
-                this.arrGoDiv[pno].innerHTML = '<input type="button" value="확인" onClick="Ladder.start(' + pno + ')">';
+                this.goBtns[pno].innerHTML = '<input type="button" value="확인" onClick="Ladder.start(' + pno + ')">';
 
                 break;
               }
@@ -313,10 +310,10 @@
 <body>
 
 
-  <div id="div_step1" style="font-size:12px;">
+  <div id="readyGame" style="font-size:12px;">
 
     인원 선택
-    <select id="sel_num">
+    <select id="selectNumber">
       <option value="2">2</option>
       <option value="3">3</option>
       <option value="4">4</option>
@@ -334,11 +331,11 @@
   </div>
 
 
-  <div id="div_step2" style="font-size:12px;display:none;">
+  <div id="playGame" style="font-size:12px;display:none;">
     <input type="button" value="START" onclick="Ladder.create();">
     <input type="button" value="HOME" onclick="location.reload();">
   </div>
-  <div id="div_body" style="width:1000px;height:450px;border:1px solid #CCCCCC;position:relative;"></div>
+  <div id="ladderMain" style="width:1000px;height:450px;border:1px solid #CCCCCC;position:relative;"></div>
 
 </body>
 
